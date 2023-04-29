@@ -1,0 +1,96 @@
+@font-face {
+  font-family: 'Staatliches-Regular';
+  src: url('resources/fonts/Staatliches/Staatliches-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Staatliches-Regular', sans-serif;
+}
+.file-section {
+  margin-bottom: 50px;
+}
+.button-container {
+  float: right;
+  margin-right: 20px;
+}
+
+.button-container button {
+  margin-left: 10px;
+}
+
+.button-style {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  width: 200px;
+}
+.button-style:hover {
+  background-color: #468d48;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+  visibility: hidden;
+}
+input[type="file"]::before {
+  content: 'Select a file';
+  display: inline-block;
+  background: #4CAF50;
+  color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  width: 200px;
+}
+
+input[type="file"]:hover::before {
+  content: 'Select a file';
+  display: inline-block;
+  background-color: #468d48;
+  color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  width: 200px;
+}
+/* .custom-file-input {
+  color: transparent;
+  background-color: #4CAF50;
+  border-color: #4CAF50;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.custom-file-input::before {
+  content: 'Select a file';
+  color: #fff;
+  font-size: 16px;
+}
+
+.custom-file-input:hover {
+  background-color: #3e8e41;
+  border-color: #3e8e41;
+}
+
+.custom-file-input:active {
+  background-color: #357b3f;
+  border-color: #357b3f;
+}
+
+.custom-file-input:focus {
+  outline: none;
+} */
