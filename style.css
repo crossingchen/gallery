@@ -1,0 +1,51 @@
+@font-face {
+  font-family: 'Staatliches-Regular';
+  src: url('resources/fonts/Staatliches/Staatliches-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Staatliches-Regular', sans-serif;
+}
+
+.project-links {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 230px;
+}
+
+.project-link {
+  display: inline-block;
+  width: 250px;
+  height: 150px;
+  background-size: cover;
+  transition: transform 0.5s;
+  border-radius: 5px;
+  text-align: center;
+  line-height: 100px;
+  margin: 10px;
+  text-decoration: none;
+}
+.project-link p {
+  color: black;
+  /* font-family: Ribes, sans-serif; */
+}
+.project-link1 {
+  background-image: url("resources/d3.png");
+}
+
+.project-link2 {
+  background-image: url("resources/python.png");
+}
+
+.project-link3 {
+  background-image: url("bg-image3.jpg");
+}
+
+.project-link:hover {
+  transform: scale(1.1);
+}
+.project-link:hover p {
+  color: rebeccapurple;
+}
