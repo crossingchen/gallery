@@ -66,31 +66,19 @@ input[type="file"]:hover::before {
   text-align: center;
   width: 200px;
 }
-/* .custom-file-input {
-  color: transparent;
-  background-color: #4CAF50;
-  border-color: #4CAF50;
-  padding: 10px;
-  border-radius: 4px;
-  cursor: pointer;
+
+.text-input {
+  margin-top: 10px;
+}
+#filter {
+  margin-top: 5px;
 }
 
-.custom-file-input::before {
-  content: 'Select a file';
-  color: #fff;
-  font-size: 16px;
-}
+/* d3 styles */
 
-.custom-file-input:hover {
-  background-color: #3e8e41;
-  border-color: #3e8e41;
-}
 
-.custom-file-input:active {
-  background-color: #357b3f;
-  border-color: #357b3f;
+.highlight-bg {
+  fill: yellow;     /* Background color */
+  opacity: 0.5;     /* Opacity for the highlight */
+  rx: 5px;           /* Rounded corner, adjust as needed */
 }
-
-.custom-file-input:focus {
-  outline: none;
-} */
