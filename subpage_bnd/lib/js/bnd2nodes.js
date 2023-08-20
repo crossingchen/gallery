@@ -6,10 +6,6 @@ function bnd2nodes(file_raw) {
   const kids_air = [];
   const parents_water = [];
   const kids_water = [];
-  var parent_air;
-  var kid_air;
-  
-  // drawio.csv direct read
   
   // bnd file direct read
   // const bndFilePath = '/Users/xchen/Library/CloudStorage/OneDrive-RMI/Desktop/_storefront/oneobj/stuff/test_runs/output-instance/instanceout.bnd';
@@ -18,41 +14,49 @@ function bnd2nodes(file_raw) {
   bnd_lines = file_raw.split("\n")
   // console.log(bnd_lines)
   
+  // if system or plant node, append 0; if zone node, append 1
   for (const line of bnd_lines) {
     const clean_line = line.trim();
     // console.log(clean_line)
     if (line.includes("Component Set,") && line.includes("Air Nodes")) {
-      parents_air.push(clean_line.split(",").slice(-3)[0]);
-      kids_air.push(clean_line.split(",").slice(-4)[0]);
-      parents_air.push(clean_line.split(",").slice(-4)[0]);
-      kids_air.push(clean_line.split(",").slice(-2)[0]);
+      if (line.includes("ZONEHVAC") || line.includes("AIRTERMINAL")) {
+        parents_air.push([clean_line.split(",").slice(-3)[0],1]);
+        kids_air.push([clean_line.split(",").slice(-4)[0],1]);
+        parents_air.push([clean_line.split(",").slice(-4)[0],1]);
+        kids_air.push([clean_line.split(",").slice(-2)[0],1]);
+      } else {
+        parents_air.push([clean_line.split(",").slice(-3)[0],0]);
+        kids_air.push([clean_line.split(",").slice(-4)[0],0]);
+        parents_air.push([clean_line.split(",").slice(-4)[0],0]);
+        kids_air.push([clean_line.split(",").slice(-2)[0],0]);
+      }
     } else if ((line.includes("Component Set,") && line.includes("Water Nodes")) || (line.includes("Component Set,") && line.includes("Pipe Nodes")) || (line.includes("Component Set,") && line.includes("Plant Nodes"))) {
-      parents_water.push(clean_line.split(",").slice(-3)[0]);
-      kids_water.push(clean_line.split(",").slice(-4)[0]);
-      parents_water.push(clean_line.split(",").slice(-4)[0]);
-      kids_water.push(clean_line.split(",").slice(-2)[0]);
-      console.log(clean_line)
+      parents_water.push([clean_line.split(",").slice(-3)[0],0]);
+      kids_water.push([clean_line.split(",").slice(-4)[0],0]);
+      parents_water.push([clean_line.split(",").slice(-4)[0],0]);
+      kids_water.push([clean_line.split(",").slice(-2)[0],0]);
+      // console.log(clean_line)
     } else if (clean_line.includes("AirLoop Supply Connections") && !clean_line.includes("! <")) {
-      parents_air.push(clean_line.split(",").slice(-1)[0]);
-      kids_air.push(clean_line.split(",").slice(-3)[0]);
+      parents_air.push([clean_line.split(",").slice(-1)[0],0]);
+      kids_air.push([clean_line.split(",").slice(-3)[0],0]);
     } else if (clean_line.includes("AirLoop Return Connections") && !clean_line.includes("! <")) {
-      parents_air.push(clean_line.split(",").slice(-3)[0]);
-      kids_air.push(clean_line.split(",").slice(-1)[0]);
+      parents_air.push([clean_line.split(",").slice(-3)[0],0]);
+      kids_air.push([clean_line.split(",").slice(-1)[0],0]);
     } else if (clean_line.includes("Supply Air Path Node,Inlet Node")) {
       parent_air = clean_line.split(",").slice(-2)[0];
     } else if (clean_line.includes("Supply Air Path Node,Outlet Node")) {
-      parents_air.push(parent_air);
-      kids_air.push(clean_line.split(",").slice(-2)[0]);
+      parents_air.push([parent_air,1]);
+      kids_air.push([clean_line.split(",").slice(-2)[0],1]);
     } else if (clean_line.includes("Return Air Path Node,Outlet Node")) {
       kid_air = clean_line.split(",").slice(-2)[0];
     } else if (clean_line.includes("Return Air Path Node,Inlet Node")) {
-      parents_air.push(clean_line.split(",").slice(-2)[0]);
-      kids_air.push(kid_air);
+      parents_air.push([clean_line.split(",").slice(-2)[0],1]);
+      kids_air.push([kid_air,1]);
     } else if (clean_line.includes("Plant Loop Connector Nodes,")) {
-      parents_water.push(clean_line.split(",").slice(-4)[0]);
-      kids_water.push(clean_line.split(",").slice(-3)[0]);
+      parents_water.push([clean_line.split(",").slice(-4)[0],0]);
+      kids_water.push([clean_line.split(",").slice(-3)[0],0]);
 
-      console.log(clean_line)
+      // console.log(clean_line)
     }
   }
   // console.log(parents_water)

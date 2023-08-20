@@ -4,7 +4,6 @@
 <meta charset="utf-8" />
 <title>bndVisualizer</title>
 <script type="text/javascript" src="./lib/js/bnd2nodes.js"></script>
-<script type="text/javascript" src="./lib/js/highlight_nodes.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 <script>
 var scheduledRender;
@@ -594,10 +593,10 @@ var scheduledRender;
         if (hasClass(el, "html-widget-static-bound"))
           console.log("it's returned");
           // return;
-        console.log("it's here")
+        console.log("it's here2")
 
         el.className = el.className + " html-widget-static-bound";
-        console.log("it's here")
+        console.log("it's here3")
         var initResult;
         if (binding.initialize) {
           initResult = binding.initialize(el,
@@ -661,7 +660,7 @@ var scheduledRender;
         }
 
         var scriptData = document.querySelector("script[data-for='" + el.id + "'][type='application/json']");
-        console.log(scriptData)
+        // console.log(scriptData)
         if (scriptData) {
           var data = JSON.parse(scriptData.textContent || scriptData.text);
           // Resolve strings marked as javascript literals to objects
@@ -746,6 +745,7 @@ var scheduledRender;
   };
 
   window.HTMLWidgets.dataframeToD3 = function(df) {
+    console.log(df)
     var names = [];
     var length;
     for (var name in df) {
@@ -1266,8 +1266,9 @@ return function(){for(var n=0,e=0;e<t;++e)n+=Math.random();return n}},um=functio
     <h2>bndVisualizer - EnergyPlus Model Branch and Node Visualization</h2>
   </div>
   <div class="file-section" style="margin-bottom:50px">
-    <label>Select a .bnd file: </label>
-    <input type="file" id="file-selector" accept=".bnd" class="custom-file-input"></input>
+    <input type="file" id="file-selector" accept=".bnd" class="custom-file-input">
+    <input type="checkbox" name="mode" value="system" checked disabled>System Level Nodes
+    <input type="checkbox" name="mode" value="zone">Zone Level Nodes
     <div class="button-container">
       <button id="refresh-data" class="button-style">Refresh Widget</button>
       <button id="toggle-btn" class="button-style">Switch to Water Nodes</button>
@@ -1348,25 +1349,50 @@ return function(){for(var n=0,e=0;e<t;++e)n+=Math.random();return n}},um=functio
   }
   
   const toggleBtn = document.getElementById('toggle-btn');
+  const display_mode = document.getElementsByName("mode");
   toggleBtn.addEventListener('click', function() {
     if(toggleBtn.innerHTML == "Switch to Water Nodes") {
       toggleBtn.innerHTML = "Switch to Air Nodes";
+      display_mode[1].disabled = true;
       generateLinks(parents_water, kids_water);
     } else {
       toggleBtn.innerHTML = "Switch to Water Nodes";
+      display_mode[1].disabled = false;
       generateLinks(parents_air, kids_air);
     }
   })
-
+  
   function generateLinks(parents, kids) {
-    var unique_nodes = []
-    for (let i = 0; i < parents.length; i++) {
-      if (!unique_nodes.includes(kids[i])) {
-        unique_nodes.push(kids[i])
+    let unique_nodes = []
+    let parents_node = []
+    let kids_node = []
+
+    console.log(display_mode[1].checked)
+    
+    if (!display_mode[1].checked) {
+      for (let i = 0;i < parents.length; i++) {
+        if (parents[i][1] === 0) {
+          parents_node.push(parents[i][0])
+        }
+        if (kids[i][1] === 0) {
+          kids_node.push(kids[i][0])
+        }
+      }
+    } else {
+      for (let i = 0;i < parents.length; i++) {
+        parents_node.push(parents[i][0])
+        kids_node.push(kids[i][0])
+      }
+    }
+
+
+    for (let i = 0; i < parents_node.length; i++) {
+      if (!unique_nodes.includes(kids_node[i])) {
+        unique_nodes.push(kids_node[i])
         // console.log(arr[i]["target"])
       }
-      if (!unique_nodes.includes(parents[i])) {
-        unique_nodes.push(parents[i])
+      if (!unique_nodes.includes(parents_node[i])) {
+        unique_nodes.push(parents_node[i])
         // console.log(arr[i]["source"])
       }
     }
@@ -1378,9 +1404,9 @@ return function(){for(var n=0,e=0;e<t;++e)n+=Math.random();return n}},um=functio
     var target_nodes = []
     var node_val = []
     var node_color = []
-    for (let i = 0; i < parents.length; i++) {
-      source_nodes.push(unique_nodes.indexOf(parents[i]))
-      target_nodes.push(unique_nodes.indexOf(kids[i]))
+    for (let i = 0; i < parents_node.length; i++) {
+      source_nodes.push(unique_nodes.indexOf(parents_node[i]))
+      target_nodes.push(unique_nodes.indexOf(kids_node[i]))
       node_val.push(1)
       node_color.push("\"#666\"")
     }
@@ -1396,16 +1422,16 @@ return function(){for(var n=0,e=0;e<t;++e)n+=Math.random();return n}},um=functio
     }
     // console.log(unique_nodes)
     let unique_nodes_in_quote = unique_nodes.map(data => `"${data}"`);
-    let parents_in_quote = parents.map(data => `"${data}"`);
-    let kids_in_quote = kids.map(data => `"${data}"`);
-    console.log(parents.length)
-    console.log(kids.length)
+    let parents_in_quote = parents_node.map(data => `"${data}"`);
+    let kids_in_quote = kids_node.map(data => `"${data}"`);
+    console.log(parents_node.length)
+    console.log(kids_node.length)
     console.log(unique_nodes.length)
 
     replacement = "{\"x\":{\"links\":{\"source\"\:[" + source_nodes + "],\"target\"\:[" + target_nodes + "],\"value\"\:[" + node_val + "],\"colour\"\:[" + node_color + "]},\"nodes\":{\"name\":["
       + unique_nodes_in_quote + "],\"group\":[" + group + "]},\"options\":{\"NodeID\":\"name\",\"Group\":\"group\",\"colourScale\":\"d3.scaleOrdinal()\\n            .domain([\'lions\', \'tigers\'])\\n           .range([\'#FF6900\', \'#694489\']);\",\"fontSize\":7,\"fontFamily\":\"serif\",\"clickTextSize\":17.5,\"linkDistance\":50,\"linkWidth\":\"function(d) { return Math.sqrt(d.value); }\",\"charge\":-30,\"opacity\":0.9,\"zoom\":true,\"legend\":false,\"arrows\":true,\"nodesize\":false,\"radiusCalculation\":\" Math.sqrt(d.nodesize)+6\",\"bounded\":false,\"opacityNoHover\":1,\"clickAction\":null}},\"evals\":[],\"jsHooks\":[]}"
  
-    console.log(replacement)
+    // console.log(replacement)
     let scriptElement = document.getElementById("node-data")
     scriptElement.innerHTML = replacement
 
@@ -1462,7 +1488,7 @@ return function(){for(var n=0,e=0;e<t;++e)n+=Math.random();return n}},um=functio
   widgetContainer.addEventListener('refresh-widget', function() {
     // reload the widget content
     console.log('Widget refreshed!');
-    console.log(widgetContainer)
+    console.log(widgetContainer);
     window.HTMLWidgets.staticRender();
     scheduledRender;
     console.log(scheduledRender)
@@ -1472,6 +1498,12 @@ return function(){for(var n=0,e=0;e<t;++e)n+=Math.random();return n}},um=functio
 
   document.getElementById('refresh-data').addEventListener('click', function() {
     console.log("button clicked")
+    if(toggleBtn.innerHTML == "Switch to Water Nodes") {
+      generateLinks(parents_air, kids_air);
+    } else {
+      toggleBtn.innerHTML = "Switch to Water Nodes";
+      generateLinks(parents_water, kids_water);
+    }
     var event = new CustomEvent('refresh-widget');
     widgetContainer.dispatchEvent(event);
     // Retrieve the widget instance

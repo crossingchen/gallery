@@ -21,7 +21,7 @@ body {
 }
 
 .button-style {
-  background-color: #4CAF50;
+  background-color: #8d9096;
   color: white;
   padding: 10px 10px;
   border: none;
@@ -33,16 +33,16 @@ body {
   width: 200px;
 }
 .button-style:hover {
-  background-color: #468d48;
+  background-color: #5d5f63;
 }
 
 input[type="file"]::-webkit-file-upload-button {
   visibility: hidden;
 }
 input[type="file"]::before {
-  content: 'Select a file';
+  content: 'Select a .bnd file';
   display: inline-block;
-  background: #4CAF50;
+  background: #8d9096;
   color: #fff;
   padding: 10px;
   border-radius: 4px;
@@ -54,9 +54,9 @@ input[type="file"]::before {
 }
 
 input[type="file"]:hover::before {
-  content: 'Select a file';
+  content: 'Select a .bnd file';
   display: inline-block;
-  background-color: #468d48;
+  background-color: #5d5f63;
   color: #fff;
   padding: 10px;
   border-radius: 4px;
