@@ -2,7 +2,7 @@
 
 For home page, visit https://crossingchen.github.io/gallery/
 
-For EnergyPlus node visualization, visit https://crossingchen.github.io/intro/subpage_bnd/index.html
+For EnergyPlus node visualization, visit https://crossingchen.github.io/gallery/subpage_bnd/index.html
 
 For EnergyPlus csv output visualization, visit (underdevelopment)
 
